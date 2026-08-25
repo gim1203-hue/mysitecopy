@@ -30,7 +30,7 @@ document.getElementById('today-date').textContent = new Date().toLocaleDateStrin
       const headers = Array.from(contentRight.querySelectorAll('h3'));
       // Only this one section is PIN-gated — every other accordion header
       // below keeps behaving exactly as it did before.
-      const PIN_LOCKED_TITLE = 'To add website address or link to open in the page or new tabs';
+      const PIN_LOCKED_TITLE = 'To add(0123) website address or link to open in the page or new tabs';
       const PIN_CODE = '0123';
       headers.forEach((header, index) => {
         const headerText = header.textContent.trim();
