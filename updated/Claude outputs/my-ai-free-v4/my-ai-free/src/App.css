@@ -1,0 +1,612 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f4f5fb;
+  --surface: #ffffff;
+  --text: #222;
+  --text-muted: #666;
+  --accent: #3a3f8f;
+  --accent-soft: #eef0fb;
+  --border: #ddd;
+}
+
+.app.dark {
+  --bg: #14151f;
+  --surface: #1e2030;
+  --text: #eee;
+  --text-muted: #aaa;
+  --accent: #8b90ff;
+  --accent-soft: #2a2d47;
+  --border: #333;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+}
+
+.app {
+  max-width: 760px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.app-header {
+  position: relative;
+  padding: 32px 24px 16px;
+  text-align: center;
+}
+
+.dark-toggle {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  border: none;
+  background: var(--surface);
+  border-radius: 999px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.app-header h1 {
+  margin: 0 0 8px;
+  color: var(--accent);
+}
+
+.app-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 24px 16px;
+}
+
+.tab {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 32px;
+  gap: 16px;
+}
+
+.chat-window {
+  flex: 1;
+  min-height: 320px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.chat-empty {
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 40px;
+}
+
+.chat-thinking {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.chat-error {
+  color: #b3261e;
+  background: #fdecea;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.message-bubble {
+  position: relative;
+  max-width: 80%;
+  padding: 10px 14px 14px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.message-bubble.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #fff;
+}
+
+.message-role {
+  display: block;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.copy-button {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.typing-cursor {
+  display: inline-block;
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.chat-form {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.chat-form button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.voice-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.voice-button {
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: none;
+  background: #6c63ff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.voice-button.listening {
+  background: #d33;
+}
+
+.voice-button.unsupported {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.stop-speaking,
+.clear-history {
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Search tab */
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.search-result-title {
+  color: #1a0dab;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.app.dark .search-result-title {
+  color: #8ab4f8;
+}
+
+.search-result-title:hover {
+  text-decoration: underline;
+}
+
+.search-result-url {
+  color: #006621;
+  font-size: 13px;
+  margin: 2px 0 4px;
+}
+
+.app.dark .search-result-url {
+  color: #6fcf97;
+}
+
+.search-result-snippet {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Files tab */
+
+.files-layout {
+  display: flex;
+  gap: 16px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 320px;
+}
+
+.file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+.file-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.file-item.active,
+.file-item:hover {
+  background: var(--accent-soft);
+}
+
+.file-content {
+  flex: 1;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Consolas', monospace;
+  font-size: 13px;
+  color: var(--text);
+  overflow-y: auto;
+  max-height: 480px;
+}
+
+/* Shared small helpers used by several new tabs */
+
+.chat-command-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.calendar-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Weather tab */
+
+.weather-result {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.weather-temp {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.weather-place {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.weather-desc {
+  color: var(--text-muted);
+  text-transform: capitalize;
+  margin-top: 2px;
+}
+
+/* Radio tab */
+
+.radio-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.radio-now-playing {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.radio-station-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.radio-country-name {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.radio-country-select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.radio-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.radio-controls button {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.radio-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.radio-volume {
+  width: 120px;
+}
+
+.radio-station-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.radio-station-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.radio-station-item.active,
+.radio-station-item:hover {
+  background: var(--accent-soft);
+}
+
+/* Calendar tab */
+
+.calendar-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-controls input[type='date'] {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.calendar-today-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.calendar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calendar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.calendar-item button {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Project links tab */
+
+.links-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.links-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.links-form input {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.links-form button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.links-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.links-item a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.links-item a:hover {
+  text-decoration: underline;
+}
+
+.links-domain {
+  color: var(--text-muted);
+  font-size: 12px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.links-item button {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+}
