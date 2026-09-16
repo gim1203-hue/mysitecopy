@@ -1,0 +1,365 @@
+/* ===== TERMINAL / HACKER CONSOLE THEME ===== */
+* {
+  box-sizing: border-box;
+}
+
+@keyframes scanlines-drift {
+  from { background-position: 0 0; }
+  to { background-position: 0 4px; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.82; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  background: #030b03;
+  color: #7dffb2;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, "Courier New", monospace;
+  animation: flicker 7s infinite;
+}
+
+/* CRT scanlines + faint grid, layered above the black background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.35) 0px,
+      rgba(0, 0, 0, 0.35) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(125, 255, 178, 0.035) 0px,
+      transparent 1px,
+      transparent 32px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(125, 255, 178, 0.035) 0px,
+      transparent 1px,
+      transparent 32px
+    );
+  animation: scanlines-drift 0.4s linear infinite;
+}
+
+/* Soft green vignette glow, like a CRT tube */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ===== App container — looks like a terminal window ===== */
+.container {
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 32px);
+  max-width: 600px;
+  margin: 48px auto;
+  padding: 40px 28px 28px;
+  background: rgba(3, 12, 5, 0.92);
+  border: 1px solid #1f5c39;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px rgba(125, 255, 178, 0.08),
+    0 0 40px rgba(34, 197, 94, 0.18),
+    0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+/* Fake terminal titlebar dots */
+.container::before {
+  content: "\25CF";
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  font-size: 13px;
+  color: #ef4444;
+  text-shadow: 18px 0 0 #f59e0b, 36px 0 0 #22c55e;
+}
+
+.container::after {
+  content: "user@task-manager: ~";
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 11px;
+  color: #3f8f5f;
+  letter-spacing: 0.03em;
+}
+
+.container h1 {
+  margin: 10px 0 26px;
+  font-size: clamp(28px, 7vw, 44px);
+  line-height: 1.15;
+  text-align: left;
+  color: #7dffb2;
+  text-shadow: 0 0 6px rgba(125, 255, 178, 0.6), 0 0 22px rgba(34, 197, 94, 0.45);
+}
+
+.container h1::before {
+  content: "$ ";
+  color: #3f8f5f;
+}
+
+.container h1::after {
+  content: "_";
+  margin-left: 4px;
+  animation: caret-blink 1s step-end infinite;
+}
+
+@keyframes caret-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.container h3 {
+  margin: 22px 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  color: #a7f3c8;
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px dashed #2f7a4c;
+  border-radius: 4px;
+}
+
+.container h3::before {
+  content: "> ";
+  color: #3f8f5f;
+}
+
+/* ===== Task form ===== */
+.container form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.container form input[type="text"] {
+  min-width: 0;
+  flex: 1;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #d1fae5;
+  background: #041a0a;
+  border: 1px solid #2f7a4c;
+  border-radius: 3px;
+  outline: none;
+  caret-color: #7dffb2;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.container form input[type="text"]::placeholder {
+  color: #3f8f5f;
+}
+
+.container form input[type="text"]:focus {
+  border-color: #7dffb2;
+  box-shadow: 0 0 0 1px rgba(125, 255, 178, 0.3), 0 0 16px rgba(34, 197, 94, 0.3);
+}
+
+.container form button[type="submit"] {
+  padding: 12px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #041a0a;
+  background: #7dffb2;
+  border: 1px solid #7dffb2;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(125, 255, 178, 0.45);
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.container form button[type="submit"]::before {
+  content: "[ ";
+}
+
+.container form button[type="submit"]::after {
+  content: " ]";
+}
+
+.container form button[type="submit"]:hover {
+  background: transparent;
+  color: #7dffb2;
+  transform: translateY(-1px);
+}
+
+.container form button[type="submit"]:focus-visible,
+.task button:focus-visible {
+  outline: 2px solid #7dffb2;
+  outline-offset: 2px;
+}
+
+/* ===== Empty state ===== */
+.empty-message {
+  margin: 0;
+  padding: 24px 14px;
+  text-align: left;
+  color: #3f8f5f;
+  background: rgba(34, 197, 94, 0.04);
+  border: 1px dashed #2f7a4c;
+  border-radius: 4px;
+}
+
+.empty-message::before {
+  content: "> ";
+}
+
+/* ===== Task list ===== */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== Individual "log line" task rows ===== */
+.task {
+  --task-accent: #7dffb2;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  color: #d1fae5;
+  background: rgba(125, 255, 178, 0.04);
+  border: 1px solid rgba(125, 255, 178, 0.14);
+  border-left: 3px solid var(--task-accent);
+  border-radius: 3px;
+  font-size: 14px;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.task:hover {
+  background: rgba(125, 255, 178, 0.09);
+  border-color: rgba(125, 255, 178, 0.4);
+  transform: translateX(3px);
+}
+
+/* ANSI-style accent rotation instead of the rainbow-neon rotation */
+.task:nth-child(5n + 1) { --task-accent: #7dffb2; }
+.task:nth-child(5n + 2) { --task-accent: #38bdf8; }
+.task:nth-child(5n + 3) { --task-accent: #facc15; }
+.task:nth-child(5n + 4) { --task-accent: #f472b6; }
+.task:nth-child(5n + 5) { --task-accent: #f87171; }
+
+.task span {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.task span::before {
+  content: "> ";
+  color: var(--task-accent);
+}
+
+.task span.completed {
+  color: #3f8f5f;
+  text-decoration: line-through;
+}
+
+.task span.completed::before {
+  content: "\2713 ";
+  color: #3f8f5f;
+}
+
+.task > div {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+/* ===== Task buttons ===== */
+.task button {
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #7dffb2;
+  background: transparent;
+  border: 1px solid #2f7a4c;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.task button:hover {
+  background: rgba(125, 255, 178, 0.14);
+  border-color: #7dffb2;
+}
+
+/* Delete button */
+.task button:last-child {
+  color: #f87171;
+  border-color: #7f2020;
+}
+
+.task button:last-child:hover {
+  background: rgba(248, 113, 113, 0.14);
+  border-color: #f87171;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  body::before,
+  .container h1::after {
+    animation: none;
+  }
+
+  .task:hover,
+  .task button:hover,
+  .container form button[type="submit"]:hover {
+    transform: none;
+  }
+}
+
+/* ===== Mobile layout ===== */
+@media (max-width: 520px) {
+  .container {
+    margin: 20px auto;
+    padding: 36px 16px 20px;
+  }
+
+  .container form {
+    flex-direction: column;
+  }
+
+  .container form button[type="submit"] {
+    width: 100%;
+  }
+
+  .task {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task button {
+    flex: 1;
+  }
+}
